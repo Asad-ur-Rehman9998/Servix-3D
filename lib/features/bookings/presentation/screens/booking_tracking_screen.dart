@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/error_view.dart';
@@ -25,6 +24,50 @@ class BookingTrackingScreen extends ConsumerWidget {
     BookingStatus.completed,
   ];
 
+  Future<void> _reschedule(
+    BuildContext context,
+    WidgetRef ref,
+    BookingEntity booking,
+  ) async {
+    final now = DateTime.now();
+    final date = await showDatePicker(
+      context: context,
+      firstDate: now,
+      lastDate: now.add(const Duration(days: 60)),
+      initialDate: booking.date.isAfter(now) ? booking.date : now.add(const Duration(days: 1)),
+    );
+    if (date == null || !context.mounted) return;
+
+    final slot = await showModalBottomSheet<String>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => ListView(
+        shrinkWrap: true,
+        children: MockData.timeSlots
+            .map(
+              (s) => ListTile(
+                title: Text(s),
+                onTap: () => Navigator.pop(context, s),
+              ),
+            )
+            .toList(),
+      ),
+    );
+    if (slot == null) return;
+
+    await ref.read(bookingsListProvider.notifier).reschedule(
+          id: booking.id,
+          date: date,
+          timeSlot: slot,
+        );
+    ref.invalidate(bookingByIdProvider(bookingId));
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Booking rescheduled')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(bookingByIdProvider(bookingId));
@@ -42,6 +85,7 @@ class BookingTrackingScreen extends ConsumerWidget {
           final provider = MockData.providers
               .where((p) => p.id == booking.providerId)
               .firstOrNull;
+          final canAdvance = booking.status.next != null;
 
           return ListView(
             padding: const EdgeInsets.all(20),
@@ -134,9 +178,37 @@ class BookingTrackingScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 12),
+              if (canAdvance)
+                AppButton(
+                  label: 'Advance status (${booking.status.next!.label})',
+                  onPressed: () async {
+                    await ref
+                        .read(bookingsListProvider.notifier)
+                        .advanceStatus(booking.id);
+                    ref.invalidate(bookingByIdProvider(bookingId));
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Updated to ${booking.status.next!.label}',
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              if (canAdvance) const SizedBox(height: 10),
+              if (booking.status != BookingStatus.completed &&
+                  booking.status != BookingStatus.cancelled)
+                AppButton(
+                  label: 'Reschedule',
+                  variant: AppButtonVariant.secondary,
+                  onPressed: () => _reschedule(context, ref, booking),
+                ),
+              const SizedBox(height: 10),
               if (provider != null)
                 AppButton(
-                  label: 'View provider',
+                  label: 'Contact / view provider',
                   variant: AppButtonVariant.secondary,
                   onPressed: () =>
                       context.push('/providers/${provider.id}'),

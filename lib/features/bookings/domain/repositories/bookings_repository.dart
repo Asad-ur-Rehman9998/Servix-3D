@@ -5,5 +5,10 @@ abstract class BookingsRepository {
   Future<BookingEntity?> getById(String id);
   Future<BookingEntity> create(BookingEntity booking);
   Future<BookingEntity> updateStatus(String id, BookingStatus status);
+  Future<BookingEntity> reschedule({
+    required String id,
+    required DateTime date,
+    required String timeSlot,
+  });
   Future<void> cancel(String id);
 }

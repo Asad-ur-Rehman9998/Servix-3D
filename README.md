@@ -5,14 +5,14 @@ Portfolio-grade Flutter marketplace for discovering, booking, and tracking home 
 ## Features
 
 - Animated splash + onboarding (persisted)
-- Auth: login, register, forgot password, OTP, reset (API-ready mocks + secure token storage)
+- Auth: login, register, forgot password, OTP, reset (persisted user + passwords)
 - Home dashboard with interactive 3D hero, categories, popular/recommended services, pros, bookings
 - Explore, search, filters, service details (Hero transitions)
 - Multi-step booking + mocked payment architecture
-- Booking tracking timeline
-- Provider profiles & reviews
-- Favorites, notifications, profile, settings
-- Light / Dark / System themes
+- Booking tracking with **advance status**, **reschedule**, cancel (persisted locally)
+- Provider profiles, reviews, in-app contact messaging
+- Favorites, notifications, profile, payment methods, help, privacy, security, about
+- Light / Dark / System themes + language preference
 - Mock map with Google Maps enablement notes
 - Clean Architecture + Riverpod + GoRouter + Dio
 

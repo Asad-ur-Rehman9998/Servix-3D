@@ -1,11 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_image.dart';
 import '../../../../core/widgets/error_view.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../../../../core/widgets/price_tag.dart';
@@ -71,13 +70,10 @@ class ServiceDetailsScreen extends ConsumerWidget {
                 flexibleSpace: FlexibleSpaceBar(
                   background: Hero(
                     tag: 'service_image_${service.id}',
-                    child: CachedNetworkImage(
-                      imageUrl: service.imageUrl,
+                    child: AppImage(
+                      source: service.imageUrl,
                       fit: BoxFit.cover,
-                      errorWidget: (_, __, ___) => Container(
-                        color: AppColors.primary.withValues(alpha: 0.12),
-                        child: Icon(service.category.icon, size: 64),
-                      ),
+                      fallbackIcon: service.category.icon,
                     ),
                   ),
                 ),
@@ -173,9 +169,9 @@ class ServiceDetailsScreen extends ConsumerWidget {
                           onTap: () =>
                               context.push('/providers/${provider.id}'),
                           contentPadding: EdgeInsets.zero,
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(provider.avatarUrl),
+                          leading: AppAvatar(
+                            source: provider.avatarUrl,
+                            fallbackText: provider.name,
                           ),
                           title: Text(provider.name),
                           subtitle: Text(

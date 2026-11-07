@@ -3,7 +3,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/app_spacing.dart';
-import '../../../../core/theme/app_colors.dart';
 
 /// Animated brand splash that scales/fades the Servix 3D logo, then finishes.
 class SplashScreen extends StatefulWidget {

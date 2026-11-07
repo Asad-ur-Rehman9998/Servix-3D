@@ -19,6 +19,7 @@ import '../../features/notifications/presentation/screens/notifications_screen.d
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/payment/presentation/screens/payment_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/profile/presentation/screens/support_screens.dart';
 import '../../features/providers/presentation/screens/provider_profile_screen.dart';
 import '../../features/search/presentation/screens/search_screen.dart';
 import '../../features/services/presentation/screens/categories_screen.dart';
@@ -220,6 +221,34 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/settings',
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/help',
+        builder: (context, state) => const HelpSupportScreen(),
+      ),
+      GoRoute(
+        path: '/privacy',
+        builder: (context, state) => const PrivacyScreen(),
+      ),
+      GoRoute(
+        path: '/security',
+        builder: (context, state) => const SecurityScreen(),
+      ),
+      GoRoute(
+        path: '/about',
+        builder: (context, state) => const AboutScreen(),
+      ),
+      GoRoute(
+        path: '/payment-methods',
+        builder: (context, state) => const PaymentMethodsScreen(),
+      ),
+      GoRoute(
+        path: '/contact/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          final name = state.uri.queryParameters['name'] ?? 'Provider';
+          return ContactProviderScreen(providerId: id, providerName: name);
+        },
       ),
       GoRoute(
         path: '/map',

@@ -4,11 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/utils/async_value_x.dart';
 import '../../data/repositories/mock_bookings_repository.dart';
 import '../../domain/entities/booking_entity.dart';
-import '../../domain/repositories/bookings_repository.dart';
-
-final bookingsRepositoryProvider = Provider<BookingsRepository>((ref) {
-  return MockBookingsRepository();
-});
 
 final bookingsListProvider =
     AsyncNotifierProvider<BookingsListController, List<BookingEntity>>(
@@ -38,6 +33,31 @@ class BookingsListController extends AsyncNotifier<List<BookingEntity>> {
   Future<void> cancel(String id) async {
     await ref.read(bookingsRepositoryProvider).cancel(id);
     await refresh();
+  }
+
+  Future<BookingEntity> advanceStatus(String id) async {
+    final current = await ref.read(bookingsRepositoryProvider).getById(id);
+    if (current == null) throw StateError('Booking not found');
+    final next = current.status.next;
+    if (next == null) return current;
+    final updated =
+        await ref.read(bookingsRepositoryProvider).updateStatus(id, next);
+    await refresh();
+    return updated;
+  }
+
+  Future<BookingEntity> reschedule({
+    required String id,
+    required DateTime date,
+    required String timeSlot,
+  }) async {
+    final updated = await ref.read(bookingsRepositoryProvider).reschedule(
+          id: id,
+          date: date,
+          timeSlot: timeSlot,
+        );
+    await refresh();
+    return updated;
   }
 }
 

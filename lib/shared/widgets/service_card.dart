@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/constants/app_spacing.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/app_image.dart';
 import '../../core/widgets/price_tag.dart';
 import '../../core/widgets/rating_stars.dart';
 import '../../features/services/domain/entities/service_entity.dart';
@@ -63,23 +63,10 @@ class ServiceCard extends StatelessWidget {
                         ),
                         child: AspectRatio(
                           aspectRatio: 16 / 10,
-                          child: CachedNetworkImage(
-                            imageUrl: service.imageUrl,
+                          child: AppImage(
+                            source: service.imageUrl,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(
-                              color: AppColors.primary.withValues(alpha: 0.08),
-                              child: const Center(
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              ),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              color: AppColors.primary.withValues(alpha: 0.1),
-                              child: Icon(
-                                service.category.icon,
-                                size: 40,
-                                color: AppColors.primary,
-                              ),
-                            ),
+                            fallbackIcon: service.category.icon,
                           ),
                         ),
                       ),

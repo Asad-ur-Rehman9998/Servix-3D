@@ -26,6 +26,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           'Explore services visually, compare pros, and book in minutes — all from one premium marketplace.',
       icon: Icons.view_in_ar_rounded,
       accent: AppColors.primary,
+      imageAsset: 'assets/images/brand/onboarding_1.jpg',
     ),
     _OnboardingPageData(
       title: 'Verified local providers',
@@ -33,6 +34,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           'Every pro is rated, reviewed, and available nearby. Track jobs from request to completion.',
       icon: Icons.verified_user_rounded,
       accent: AppColors.secondary,
+      imageAsset: 'assets/images/brand/onboarding_2.jpg',
     ),
     _OnboardingPageData(
       title: 'Pay securely, relax fully',
@@ -40,6 +42,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           'Transparent pricing, secure checkout, and real-time updates so you always know what is next.',
       icon: Icons.security_rounded,
       accent: AppColors.accent,
+      imageAsset: 'assets/images/brand/onboarding_3.jpg',
     ),
   ];
 
@@ -98,28 +101,43 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          width: 160,
-                          height: 160,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                page.accent.withValues(alpha: 0.18),
-                                AppColors.primary.withValues(alpha: 0.08),
+                        ClipRRect(
+                          borderRadius:
+                              BorderRadius.circular(AppSpacing.radiusXl),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 220,
+                            child: Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                Image.asset(
+                                  page.imageAsset,
+                                  fit: BoxFit.cover,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Colors.black.withValues(alpha: 0.05),
+                                        Colors.black.withValues(alpha: 0.45),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: CircleAvatar(
+                                      backgroundColor: page.accent,
+                                      child: Icon(page.icon, color: Colors.white),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
-                            borderRadius:
-                                BorderRadius.circular(AppSpacing.radiusXl),
-                            border: Border.all(
-                              color: page.accent.withValues(alpha: 0.25),
-                            ),
-                          ),
-                          child: Icon(
-                            page.icon,
-                            size: 72,
-                            color: page.accent,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.xxl),
@@ -191,10 +209,12 @@ class _OnboardingPageData {
     required this.subtitle,
     required this.icon,
     required this.accent,
+    required this.imageAsset,
   });
 
   final String title;
   final String subtitle;
   final IconData icon;
   final Color accent;
+  final String imageAsset;
 }

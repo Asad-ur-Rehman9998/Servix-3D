@@ -8,7 +8,6 @@ import '../../../../core/widgets/loading_widget.dart';
 import '../../../../shared/data/mock_data.dart';
 import '../../../../shared/widgets/service_card.dart';
 import '../../../services/domain/entities/service_entity.dart';
-import '../../../services/presentation/providers/services_provider.dart';
 import '../providers/search_provider.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {

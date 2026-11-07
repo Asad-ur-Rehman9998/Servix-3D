@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_image.dart';
 import '../../../../core/widgets/error_view.dart';
 import '../../../../core/widgets/rating_stars.dart';
 import '../../../../shared/data/mock_data.dart';
@@ -40,11 +40,10 @@ class ProviderProfileScreen extends StatelessWidget {
                 child: Center(
                   child: Hero(
                     tag: 'provider_avatar_${provider.id}',
-                    child: CircleAvatar(
+                    child: AppAvatar(
+                      source: provider.avatarUrl,
                       radius: 54,
-                      backgroundImage: CachedNetworkImageProvider(
-                        provider.avatarUrl,
-                      ),
+                      fallbackText: provider.name,
                     ),
                   ),
                 ),
@@ -140,13 +139,9 @@ class ProviderProfileScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                   AppButton(
                     label: 'Contact provider',
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Messaging is mocked in this demo'),
-                        ),
-                      );
-                    },
+                    onPressed: () => context.push(
+                      '/contact/${provider.id}?name=${Uri.encodeComponent(provider.name)}',
+                    ),
                   ),
                 ],
               ),
@@ -231,12 +226,10 @@ class _ReviewsScreenState extends ConsumerState<ReviewsScreen> {
           ...reviews.map(
             (r) => Card(
               margin: const EdgeInsets.only(bottom: 10),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: r.avatarUrl != null
-                      ? NetworkImage(r.avatarUrl!)
-                      : null,
-                  child: r.avatarUrl == null ? Text(r.authorName[0]) : null,
+              child:               ListTile(
+                leading: AppAvatar(
+                  source: r.avatarUrl,
+                  fallbackText: r.authorName,
                 ),
                 title: Text(r.authorName),
                 subtitle: Text(r.comment),

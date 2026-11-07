@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_image.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../../../../core/widgets/section_header.dart';
 import '../../../../shared/data/mock_data.dart';
@@ -50,22 +51,10 @@ class HomeScreen extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
                 child: Row(
                   children: [
-                    CircleAvatar(
+                    AppAvatar(
+                      source: user?.avatarUrl,
                       radius: 24,
-                      backgroundColor:
-                          AppColors.primary.withValues(alpha: 0.15),
-                      backgroundImage: user?.avatarUrl != null
-                          ? NetworkImage(user!.avatarUrl!)
-                          : null,
-                      child: user?.avatarUrl == null
-                          ? Text(
-                              firstName.isNotEmpty ? firstName[0] : 'S',
-                              style: const TextStyle(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            )
-                          : null,
+                      fallbackText: firstName,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -457,36 +446,55 @@ class _PromoBanner extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
         child: Ink(
-          padding: const EdgeInsets.all(20),
+          height: 120,
           decoration: BoxDecoration(
-            gradient: AppColors.primaryGradient,
             borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+            image: const DecorationImage(
+              image: AssetImage('assets/images/brand/promo_banner.jpg'),
+              fit: BoxFit.cover,
+            ),
           ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Weekend Deep Clean',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800,
-                          ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Save 15% on Premium Home Deep Clean',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.white.withValues(alpha: 0.9),
-                          ),
-                    ),
-                  ],
-                ),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  Colors.black.withValues(alpha: 0.72),
+                  Colors.black.withValues(alpha: 0.25),
+                ],
               ),
-              const Icon(Icons.arrow_forward_rounded, color: Colors.white),
-            ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Weekend Deep Clean',
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Save 15% on Premium Home Deep Clean',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Colors.white.withValues(alpha: 0.9),
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.arrow_forward_rounded, color: Colors.white),
+              ],
+            ),
           ),
         ),
       ),

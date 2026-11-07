@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/constants/app_spacing.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/widgets/app_image.dart';
 import '../../core/widgets/rating_stars.dart';
 import '../../features/providers/domain/provider_entity.dart';
 
@@ -55,12 +55,10 @@ class ProviderCard extends StatelessWidget {
                   children: [
                     Hero(
                       tag: 'provider_avatar_${provider.id}',
-                      child: CircleAvatar(
+                      child: AppAvatar(
+                        source: provider.avatarUrl,
                         radius: 26,
-                        backgroundColor:
-                            AppColors.primary.withValues(alpha: 0.12),
-                        backgroundImage:
-                            CachedNetworkImageProvider(provider.avatarUrl),
+                        fallbackText: provider.name,
                       ),
                     ),
                     const Spacer(),

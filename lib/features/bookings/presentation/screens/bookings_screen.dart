@@ -298,7 +298,11 @@ class _BookingFlowScreenState extends ConsumerState<BookingFlowScreen> {
                   color: selected ? AppColors.primary : Theme.of(context).dividerColor,
                 ),
               ),
-              leading: CircleAvatar(backgroundImage: NetworkImage(p.avatarUrl)),
+              leading: CircleAvatar(
+                backgroundImage: p.avatarUrl.startsWith('assets/')
+                    ? AssetImage(p.avatarUrl) as ImageProvider
+                    : NetworkImage(p.avatarUrl),
+              ),
               title: Text(p.name),
               subtitle: Text('${p.title} · ${p.rating}★ · ${p.distanceKm} km'),
               trailing: selected

@@ -5,9 +5,10 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/app_button.dart';
-import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/utils/async_value_x.dart';
+import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_image.dart';
+import '../../../../core/widgets/app_text_field.dart';
 import '../../../auth/domain/validators/auth_validators.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 
@@ -27,24 +28,10 @@ class ProfileScreen extends ConsumerWidget {
           Center(
             child: Column(
               children: [
-                CircleAvatar(
+                AppAvatar(
+                  source: user?.avatarUrl,
                   radius: 44,
-                  backgroundColor: AppColors.primary.withValues(alpha: 0.15),
-                  backgroundImage: user?.avatarUrl != null
-                      ? NetworkImage(user!.avatarUrl!)
-                      : null,
-                  child: user?.avatarUrl == null
-                      ? Text(
-                          (user?.name.isNotEmpty ?? false)
-                              ? user!.name[0]
-                              : 'S',
-                          style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.primary,
-                          ),
-                        )
-                      : null,
+                  fallbackText: user?.name,
                 ),
                 const SizedBox(height: 12),
                 Text(
@@ -87,9 +74,7 @@ class ProfileScreen extends ConsumerWidget {
             context,
             icon: Icons.credit_card_outlined,
             title: 'Payment methods',
-            onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Demo: manage cards in production')),
-            ),
+            onTap: () => context.push('/payment-methods'),
           ),
           _tile(
             context,
@@ -101,20 +86,13 @@ class ProfileScreen extends ConsumerWidget {
             context,
             icon: Icons.help_outline_rounded,
             title: 'Help & support',
-            onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('support@servix3d.com')),
-            ),
+            onTap: () => context.push('/help'),
           ),
           _tile(
             context,
             icon: Icons.info_outline_rounded,
             title: 'About ${AppConstants.appName}',
-            onTap: () => showAboutDialog(
-              context: context,
-              applicationName: AppConstants.appName,
-              applicationVersion: '1.0.0',
-              applicationLegalese: AppConstants.appTagline,
-            ),
+            onTap: () => context.push('/about'),
           ),
           const SizedBox(height: 12),
           AppButton(
